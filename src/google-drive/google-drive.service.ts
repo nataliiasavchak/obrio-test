@@ -22,7 +22,7 @@ export class GoogleDriveService {
     const { file, type, name } = params;
     return drive.files.create({
       requestBody: {
-        name: `obrio-test-${Math.floor(Math.random() * 9000) + 1000}`,
+        name,
         mimeType: type,
         description: 'File description to make it less suspicious',
       },

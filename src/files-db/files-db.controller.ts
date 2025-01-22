@@ -1,33 +1,18 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
-import { FilesService } from './files.service';
-
-interface File {
-  file: string;
-  url: string;
-}
+import { FilesDatabaseService } from './files-db.service';
+import { File } from './files-db.entity';
+import { FilesApiService } from 'src/files-api/files-api.service';
 
 @Controller('files')
 export class FilesController {
   constructor(
     private googleDriveService: GoogleDriveService,
-    private filesService: FilesService,
+    private filesApiService: FilesApiService,
   ) {}
   @Get()
-  findAll(): File[] {
-    console.log('All files returned');
-
-    // TODO: read files from db 
-    return [
-      {
-        file: '123456',
-        url: 'http://test.com',
-      },
-      {
-        file: '456789',
-        url: 'http://test1.com',
-      },
-    ];
+  async findAll(): Promise<File[]> {
+    return this.filesApiService.findAll();
   }
 
   @Post()
@@ -38,7 +23,7 @@ export class FilesController {
     for (let url of urls) {
       console.log(`Processing url ${url}...`);
       try {
-        const downloadedFile = await this.filesService.downloadFromURL(url);
+        const downloadedFile = await this.filesApiService.downloadFromURL(url);
 
         const response = await this.googleDriveService.uploadFile({
           file: downloadedFile.data,
@@ -51,8 +36,12 @@ export class FilesController {
           email: 'natanatkanatalka@gmail.com',
         });
 
-        // TODO: insert into db here
+        await this.filesApiService.create({
+          fileUrl: url,
+          googleDriveId: response.data.id,
+        });
 
+        // TODO: insert into db here
       } catch (err) {
         errors.push({
           message: err.response?.data?.error?.message ?? err,
