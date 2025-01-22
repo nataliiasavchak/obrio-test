@@ -1,27 +1,19 @@
-import axios from 'axios';
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import crypto from 'crypto';
+import { GoogleDriveService } from 'src/google-drive/google-drive.service';
+import { FilesService } from './files.service';
 
 interface File {
   file: string;
   url: string;
 }
 
-const { google } = require('googleapis');
-
-const auth = new google.auth.GoogleAuth({
-  keyFile: './obrio-test-9a52368ef5fc.json',
-  scopes: ['https://www.googleapis.com/auth/drive'],
-});
-
-const drive = google.drive({
-  version: 'v3',
-  auth,
-});
-
 @Controller('files')
 export class FilesController {
-  constructor() {} // private readonly googleDriveService: GoogleDriveService, // private readonly httpService: HttpService,
+  constructor(
+    private googleDriveService: GoogleDriveService,
+    private filesService: FilesService,
+  ) {}
   @Get()
   findAll(): File[] {
     console.log('All files returned');
@@ -39,45 +31,25 @@ export class FilesController {
 
   @Post()
   async uploadFiles(@Body() urls: string[]): Promise<any> {
-    console.log(`Urls received:${urls}`);
+    console.log(`Urls received:${JSON.stringify(urls, null, 2)}.`);
     let errors: { message: string; url: string }[] = [];
+
     for (let url of urls) {
       console.log(`Processing url ${url}...`);
       try {
-        const downloadedFile = await axios.get(url, {
-          responseType: 'stream',
-        });
-        const fileType = downloadedFile.headers['content-type'];
-        let response;
+        const downloadedFile = await this.filesService.downloadFromURL(url);
 
-        response = await drive.files.create({
-          requestBody: {
-            name: `obrio-test-${Math.floor(Math.random() * 9000) + 1000}`,
-            mimeType: fileType,
-            description: 'File description to make it less suspicious',
-          },
-          media: {
-            mimeType: fileType,
-            body: downloadedFile.data,
-          },
+        const response = await this.googleDriveService.uploadFile({
+          file: downloadedFile.data,
+          type: downloadedFile.headers['content-type'],
+          name: `obrio-test-${Math.floor(Math.random() * 9000) + 1000}`,
         });
-        // temp
-        await drive.permissions.create({
+
+        await this.googleDriveService.shareFileWithEmail({
           fileId: response.data.id,
-          requestBody: {
-            role: 'writer',
-            type: 'user',
-            emailAddress: 'natanatkanatalka@gmail.com', // Replace with your Google account email
-          },
-        });
-        await drive.files.update({
-          fileId: response.data.id,
-          addParents: 'root',
+          email: 'natanatkanatalka@gmail.com',
         });
       } catch (err) {
-        console.log(
-          `There was an error uploading file to Google Drive: ${err}`,
-        );
         errors.push({
           message: err.response?.data?.error?.message ?? err,
           url,
@@ -85,10 +57,12 @@ export class FilesController {
       }
     }
     if (errors.length) {
-      console.log(`There was an error during uploading files to Google Drive.`);
+      console.log(
+        `There was an error during downloading or uploading some files to Google Drive.`,
+      );
       errors.forEach((errorObj) => {
         console.log(
-          `Failed to upload file from URL: ${errorObj.url}, error message: ${errorObj.message}`,
+          `Failed to process file from URL: ${errorObj.url}, error message: ${errorObj.message}`,
         );
       });
     }

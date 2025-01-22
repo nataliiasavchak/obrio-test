@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-
+import axios from 'axios';
 
 @Injectable()
 export class FilesService {
-    async uploadFileToDrive() {
-
-    }
+  async downloadFromURL(url: string) {
+    return axios.get(url, {
+      responseType: 'stream',
+    });
+  }
 }
