@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import crypto from 'crypto';
 import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 import { FilesService } from './files.service';
 
@@ -17,6 +16,8 @@ export class FilesController {
   @Get()
   findAll(): File[] {
     console.log('All files returned');
+
+    // TODO: read files from db 
     return [
       {
         file: '123456',
@@ -49,6 +50,9 @@ export class FilesController {
           fileId: response.data.id,
           email: 'natanatkanatalka@gmail.com',
         });
+
+        // TODO: insert into db here
+
       } catch (err) {
         errors.push({
           message: err.response?.data?.error?.message ?? err,
