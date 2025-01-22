@@ -62,7 +62,7 @@ export class FilesController {
     }
     if (errors.length) {
       console.log(
-        `There was an error during downloading or uploading some files to Google Drive.`,
+        `There was an error during processing files to Google Drive.`,
       );
       errors.forEach((errorObj) => {
         console.log(
