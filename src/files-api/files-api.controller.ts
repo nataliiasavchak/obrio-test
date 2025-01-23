@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body } from '@nestjs/common';
 import { FilesApiService } from './files-api.service';
 import { CreateFilesApiDto } from './dto/create-files-api.dto';
 
-@Controller('files-api')
+@Controller('files')
 export class FilesApiController {
   constructor(private readonly filesApiService: FilesApiService) {}
 
