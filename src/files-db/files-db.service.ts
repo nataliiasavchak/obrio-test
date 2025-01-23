@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class FilesDatabaseService {
   constructor(
     @InjectRepository(File)
-    private filesRepository: Repository<File>,
+    private readonly filesRepository: Repository<File>,
   ) {}
 
   async createFile(params: {

@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFilesApiDto } from './dto/create-files-api.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { FilesDatabaseService } from 'src/files-db/files-db.service';
 import axios from 'axios';
 
@@ -14,7 +12,7 @@ export class FilesApiService {
     await this.filesDatabaseService.createFile({ fileUrl, googleDriveId });
   }
 
-  findAll() {
+  async findAll() {
     return this.filesDatabaseService.getAllFiles();
   }
 

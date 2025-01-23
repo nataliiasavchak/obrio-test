@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FilesController } from './files-db/files-db.controller';
-import { FilesModule } from './files-db/files-db.module';
+import { FilesDatabaseModule } from './files-db/files-db.module';
 import { GoogleDriveService } from './google-drive/google-drive.service';
 import { FilesDatabaseService } from './files-db/files-db.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { File } from './files-db/files-db.entity';
 import { FilesApiModule } from './files-api/files-api.module';
 import { FilesApiService } from './files-api/files-api.service';
+import { FilesApiController } from './files-api/files-api.controller';
 
 @Module({
   imports: [
@@ -16,17 +16,22 @@ import { FilesApiService } from './files-api/files-api.service';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      password: '1111',
-      username: 'postgres',
+      password: process.env.POSTGRES_PASSWORD,
+      username: process.env.POSTGRES_USERNAME,
       entities: [File],
-      database: 'obriofiles',
+      // database: 'obriofiles',
       synchronize: true,
       logging: true,
     }),
-    FilesModule,
-    FilesApiModule,
+    // FilesDatabaseModule,
+    FilesApiModule
   ],
-  controllers: [AppController, FilesController],
-  providers: [AppService, GoogleDriveService, FilesDatabaseService, FilesApiService],
+  controllers: [AppController, FilesApiController],
+  providers: [
+    AppService,
+    GoogleDriveService,
+    FilesDatabaseService,
+    // FilesApiService,
+  ],
 })
 export class AppModule {}
