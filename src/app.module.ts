@@ -14,7 +14,8 @@ import { FilesDatabaseModule } from './files-db/files-db.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
+      host: 'localhost',
+      // host: 'db',
       port: 5432,
       password: '1111',
       username: 'postgres',

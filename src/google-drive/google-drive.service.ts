@@ -21,10 +21,7 @@ export class GoogleDriveService {
     name: string;
   }) {
     const { file, type, name } = params;
-    // const res = await drive.files.get();
-    // console.log('nata');
-    // console.log(res);
-
+    console.log(`Uploading file ${name} with type ${type} to Google Drive...`);
     return drive.files.create({
       requestBody: {
         name,
@@ -40,6 +37,7 @@ export class GoogleDriveService {
 
   async shareFileWithEmail(params: { fileId: string; email: string }) {
     const { fileId, email } = params;
+    console.log(`Temporary measures to be able to see uploaded images in Google Drive with personal account`)
     return drive.permissions.create({
       fileId: fileId,
       requestBody: {

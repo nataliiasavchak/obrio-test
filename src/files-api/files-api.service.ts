@@ -26,24 +26,25 @@ export class FilesApiService {
     await this.filesDatabaseService.createFileRecordInDb({
       fileUrl: url,
       googleDriveId: uploadedFile.data.id,
-      googleDriveUrl: '',
+      googleDriveUrl: 'http://idkwheretogetit.com',
     });
   }
 
   async createAll(urls: string[]) {
-    console.log('all urls:', urls);
+    console.log('Processing URLs:', JSON.stringify(urls, null, 2));
     let result: { url: string; error?: string; success: boolean }[] = [];
     for (let url of urls) {
       try {
+        console.log(`Processing URL ${url}`);
         await this.create(url);
       } catch (err: any) {
-         result.push({
+        result.push({
           url,
           success: false,
           error: err,
         });
       }
-       result.push({
+      result.push({
         url,
         success: true,
       });
@@ -56,6 +57,7 @@ export class FilesApiService {
   }
 
   async downloadFromURL(url: string) {
+    console.log(`Downloading image from URL ${url}...`);
     return axios.get(url, {
       responseType: 'stream',
     });

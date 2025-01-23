@@ -15,7 +15,10 @@ export class FilesDatabaseService {
     googleDriveId: string;
     googleDriveUrl: string;
   }): Promise<File> {
-    const { fileUrl, googleDriveId, googleDriveUrl } = params;
+    const { fileUrl, googleDriveId } = params;
+    console.log(
+      `Inserting file record into 'file' table with data: ${JSON.stringify(params, null, 2)}`,
+    );
 
     const file = this.fileRepository.create({
       file_url: fileUrl,
