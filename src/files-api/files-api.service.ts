@@ -37,13 +37,13 @@ export class FilesApiService {
       try {
         await this.create(url);
       } catch (err: any) {
-        return result.push({
+         result.push({
           url,
           success: false,
           error: err,
         });
       }
-      return result.push({
+       result.push({
         url,
         success: true,
       });

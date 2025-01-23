@@ -20,7 +20,7 @@ export class FilesDatabaseService {
     const file = this.fileRepository.create({
       file_url: fileUrl,
       google_drive_id: googleDriveId,
-      google_drive_url: googleDriveUrl,
+      google_drive_url: 'test',
     });
 
     return this.fileRepository.save(file);

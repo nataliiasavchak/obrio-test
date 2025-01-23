@@ -21,6 +21,10 @@ export class GoogleDriveService {
     name: string;
   }) {
     const { file, type, name } = params;
+    // const res = await drive.files.get();
+    // console.log('nata');
+    // console.log(res);
+
     return drive.files.create({
       requestBody: {
         name,
