@@ -14,16 +14,16 @@ import { FilesApiController } from './files-api/files-api.controller';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       password: process.env.POSTGRES_PASSWORD,
-      username: process.env.POSTGRES_USERNAME,
+      username: process.env.POSTGRES_USER,
       entities: [File],
+      database: process.env.POSTGRES_DB,
       // database: 'obriofiles',
       synchronize: true,
       logging: true,
     }),
-    // FilesDatabaseModule,
     FilesApiModule
   ],
   controllers: [AppController, FilesApiController],
@@ -31,7 +31,7 @@ import { FilesApiController } from './files-api/files-api.controller';
     AppService,
     GoogleDriveService,
     FilesDatabaseService,
-    // FilesApiService,
+    FilesApiService,
   ],
 })
 export class AppModule {}

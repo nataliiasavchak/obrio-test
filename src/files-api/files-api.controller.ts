@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { FilesApiService } from './files-api.service';
 import { CreateFilesApiDto } from './dto/create-files-api.dto';
 

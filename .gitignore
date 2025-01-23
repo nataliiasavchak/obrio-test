@@ -56,3 +56,5 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 obrio-test-9a52368ef5fc.json
+
+/pgdata
