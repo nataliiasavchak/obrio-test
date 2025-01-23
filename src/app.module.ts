@@ -8,6 +8,7 @@ import { File } from './files-db/files-db.entity';
 import { FilesApiModule } from './files-api/files-api.module';
 import { FilesApiService } from './files-api/files-api.service';
 import { FilesApiController } from './files-api/files-api.controller';
+import { FilesDatabaseModule } from './files-db/files-db.module';
 
 @Module({
   imports: [
@@ -22,13 +23,13 @@ import { FilesApiController } from './files-api/files-api.controller';
       synchronize: true,
       logging: true,
     }),
-    FilesApiModule
+    FilesApiModule,
+    FilesDatabaseModule,
   ],
   controllers: [AppController, FilesApiController],
   providers: [
     AppService,
     GoogleDriveService,
-    FilesDatabaseService,
     FilesApiService,
   ],
 })

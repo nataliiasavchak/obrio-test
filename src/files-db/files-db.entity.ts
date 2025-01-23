@@ -11,6 +11,9 @@ export class File {
   @Column()
   google_drive_id: string;
 
+  @Column()
+  google_drive_url: string;
+
   @CreateDateColumn({ type: 'timestamptz' })
   created_dt: Date;
 }

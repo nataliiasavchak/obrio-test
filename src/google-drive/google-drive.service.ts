@@ -14,7 +14,8 @@ const drive = google.drive({
 
 @Injectable()
 export class GoogleDriveService {
-  async uploadFile(params: {
+
+  async uploadFileToDrive(params: {
     file: ReadableStream;
     type: string;
     name: string;
@@ -40,7 +41,7 @@ export class GoogleDriveService {
       requestBody: {
         role: 'writer',
         type: 'user',
-        emailAddress: email, // Replace with your Google account email
+        emailAddress: email, 
       },
     });
   }

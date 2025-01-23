@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { FilesApiService } from './files-api.service';
 import { FilesApiController } from './files-api.controller';
-import { FilesDatabaseService } from 'src/files-db/files-db.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { File } from 'src/files-db/files-db.entity';
 import { FilesDatabaseModule } from 'src/files-db/files-db.module';
+import { GoogleDriveService } from 'src/google-drive/google-drive.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([File])],
+  imports: [FilesDatabaseModule],
   controllers: [FilesApiController],
-  providers: [FilesApiService, FilesDatabaseService],
+  providers: [FilesApiService, GoogleDriveService],
 })
 export class FilesApiModule {}

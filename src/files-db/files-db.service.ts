@@ -10,23 +10,23 @@ export class FilesDatabaseService {
     private fileRepository: Repository<File>,
   ) {}
 
-  async createFile(params: {
+  async createFileRecordInDb(params: {
     fileUrl: string;
     googleDriveId: string;
+    googleDriveUrl: string;
   }): Promise<File> {
-    const { fileUrl, googleDriveId } = params;
+    const { fileUrl, googleDriveId, googleDriveUrl } = params;
 
     const file = this.fileRepository.create({
       file_url: fileUrl,
       google_drive_id: googleDriveId,
-      created_dt: new Date(),
+      google_drive_url: googleDriveUrl,
     });
 
     return this.fileRepository.save(file);
   }
 
   async getAllFiles(): Promise<File[]> {
-    return [];
-    // return this.filesRepository.find();
+    return this.fileRepository.find();
   }
 }
