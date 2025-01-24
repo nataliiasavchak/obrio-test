@@ -21,7 +21,7 @@ export class FilesApiService {
 
     await this.googleDriveService.setFilePublic(fileId);
 
-    await this.filesDatabaseService.createFileRecordInDb({
+    await this.filesDatabaseService.createFileRecord({
       fileUrl: url,
       googleDriveId: uploadedFile.data.id,
       googleDriveUrl: `https://drive.google.com/file/d/${fileId}/view`,

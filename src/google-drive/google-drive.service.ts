@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 
 const { google } = require('googleapis');
 
+interface IFileToUpload {
+  file: ReadableStream;
+  type: string;
+  name: string;
+}
+
 @Injectable()
 export class GoogleDriveService {
   private drive;
   constructor() {
     const auth = new google.auth.GoogleAuth({
-      keyFile: './obrio-test-secret-file.json',
+      keyFile: process.env.GOOGLE_API_CREDENTIALS_JSON_PATH,
       scopes: ['https://www.googleapis.com/auth/drive'],
     });
 
@@ -16,18 +22,13 @@ export class GoogleDriveService {
       auth,
     });
   }
-  async uploadFileToDrive(params: {
-    file: ReadableStream;
-    type: string;
-    name: string;
-  }) {
-    const { file, type, name } = params;
+  async uploadFileToDrive(fileToUpload: IFileToUpload) {
+    const { file, type, name } = fileToUpload;
     console.log(`Uploading file ${name} with type ${type} to Google Drive...`);
     return this.drive.files.create({
       requestBody: {
         name,
         mimeType: type,
-        description: 'File description to make it less suspicious',
       },
       media: {
         mimeType: type,
@@ -42,21 +43,6 @@ export class GoogleDriveService {
       requestBody: {
         role: 'reader',
         type: 'anyone',
-      },
-    });
-  }
-
-  async shareFileWithEmail(params: { fileId: string; email: string }) {
-    const { fileId, email } = params;
-    console.log(
-      `Temporary measures to be able to see uploaded images in Google Drive with personal account`,
-    );
-    return this.drive.permissions.create({
-      fileId: fileId,
-      requestBody: {
-        role: 'writer',
-        type: 'user',
-        emailAddress: email,
       },
     });
   }

@@ -17,7 +17,7 @@ ConfigModule.forRoot();
     TypeOrmModule.forRoot({
       host: process.env.DATABASE_HOST,
       type: 'postgres',
-      port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+      port: +(process.env.DATABASE_PORT ?? '5432'),
       password: process.env.POSTGRES_PASSWORD,
       username: process.env.POSTGRES_USER,
       entities: [File],

@@ -3,6 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './files-db.entity';
 import { Repository } from 'typeorm';
 
+interface ICreateFileRecord {
+  fileUrl: string;
+  googleDriveId: string;
+  googleDriveUrl: string;
+}
+
 @Injectable()
 export class FilesDatabaseService {
   constructor(
@@ -10,15 +16,12 @@ export class FilesDatabaseService {
     private fileRepository: Repository<File>,
   ) {}
 
-  async createFileRecordInDb(params: {
-    fileUrl: string;
-    googleDriveId: string;
-    googleDriveUrl: string;
-  }): Promise<File> {
-    const { fileUrl, googleDriveId, googleDriveUrl } = params;
+  async createFileRecord(createFileRecord: ICreateFileRecord): Promise<File> {
     console.log(
-      `Inserting file record into 'file' table with data: ${JSON.stringify(params, null, 2)}`,
+      `Inserting file record into file table with data: ${JSON.stringify(createFileRecord, null, 2)}`,
     );
+
+    const { fileUrl, googleDriveId, googleDriveUrl } = createFileRecord;
 
     const file = this.fileRepository.create({
       file_url: fileUrl,
