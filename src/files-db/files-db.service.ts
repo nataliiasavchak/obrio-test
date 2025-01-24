@@ -18,7 +18,7 @@ export class FilesDatabaseService {
 
   async createFileRecord(createFileRecord: ICreateFileRecord): Promise<File> {
     console.log(
-      `Inserting file record into file table with data: ${JSON.stringify(createFileRecord, null, 2)}`,
+      `Inserting file record into files table with data: ${JSON.stringify(createFileRecord, null, 2)}`,
     );
 
     const { fileUrl, googleDriveId, googleDriveUrl } = createFileRecord;
