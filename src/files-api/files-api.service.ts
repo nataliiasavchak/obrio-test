@@ -17,16 +17,14 @@ export class FilesApiService {
       type: downloadedFile.headers['content-type'],
       name: `obrio-test-${Math.floor(Math.random() * 9000) + 1000}`,
     });
+    const fileId = uploadedFile.data.id;
 
-    await this.googleDriveService.shareFileWithEmail({
-      fileId: uploadedFile.data.id,
-      email: 'natanatkanatalka@gmail.com',
-    });
+    await this.googleDriveService.setFilePublic(fileId);
 
     await this.filesDatabaseService.createFileRecordInDb({
       fileUrl: url,
       googleDriveId: uploadedFile.data.id,
-      googleDriveUrl: 'http://idkwheretogetit.com',
+      googleDriveUrl: `https://drive.google.com/file/d/${fileId}/view`,
     });
   }
 
@@ -38,7 +36,7 @@ export class FilesApiService {
         console.log(`Processing URL ${url}`);
         await this.create(url);
       } catch (err: any) {
-        result.push({
+        return result.push({
           url,
           success: false,
           error: err,

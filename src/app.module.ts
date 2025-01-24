@@ -2,25 +2,26 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GoogleDriveService } from './google-drive/google-drive.service';
-import { FilesDatabaseService } from './files-db/files-db.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { File } from './files-db/files-db.entity';
 import { FilesApiModule } from './files-api/files-api.module';
 import { FilesApiService } from './files-api/files-api.service';
 import { FilesApiController } from './files-api/files-api.controller';
 import { FilesDatabaseModule } from './files-db/files-db.module';
+import { ConfigModule } from '@nestjs/config';
+
+ConfigModule.forRoot();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      host: process.env.DATABASE_HOST,
       type: 'postgres',
-      host: 'localhost',
-      // host: 'db',
-      port: 5432,
-      password: '1111',
-      username: 'postgres',
+      port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+      password: process.env.POSTGRES_PASSWORD,
+      username: process.env.POSTGRES_USER,
       entities: [File],
-      database: 'postgres',
+      database: process.env.POSTGRES_DB,
       synchronize: true,
       logging: true,
     }),
@@ -28,10 +29,6 @@ import { FilesDatabaseModule } from './files-db/files-db.module';
     FilesDatabaseModule,
   ],
   controllers: [AppController, FilesApiController],
-  providers: [
-    AppService,
-    GoogleDriveService,
-    FilesApiService,
-  ],
+  providers: [AppService, GoogleDriveService, FilesApiService],
 })
 export class AppModule {}

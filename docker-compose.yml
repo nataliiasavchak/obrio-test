@@ -7,20 +7,21 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: 1111
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 
-  # app:
-  #   build:
-  #     context: .
-  #   container_name: obrio-docker
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     DATABASE_HOST: db
-  #     DATABASE_PORT: 5432
-  #     DATABASE_USER: postgres
-  #     DATABASE_PASSWORD: 1111
-  #   depends_on:
-  #     - db
+  app:
+    build:
+      context: .
+    container_name: obrio-docker
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_NAME: ${POSTGRES_DB}
+    depends_on:
+      - db
